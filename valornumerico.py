@@ -5,27 +5,34 @@
 # Importo a biblioteca
 from num2words import num2words
 
-# Leio um valor do tipo float do teclado
-# Tratamento número digitados com vírgula
-valor_em_reais = 0
-try:
-    valor_em_reais = float(input('Digite um valor em reais: '));
-except ValueError:
-    print("Digite um valor válido")
+def tratarvalordecimal(valor_em_reais): 
+    if(valor_em_reais % 1 != 0):
+        # Formato este valor com duas casas decimais
+        valor_em_reais = "{:.2f}".format(valor_em_reais)
+        # Divido este valor entre a parte inteira e a parte decimal
+        divididopelopontodecimal = valor_em_reais.split('.')
+        # Escrevo o número por extenso - no padrão pt-br
+        parte_inteira = num2words(divididopelopontodecimal[0], lang='pt-br')
+        parte_fracionaria = num2words(divididopelopontodecimal[1], lang='pt-br')
+        print(parte_inteira + ' reais e ' + parte_fracionaria + ' centavos')
 
-if(valor_em_reais % 1 != 0):
-    # Formato este valor com duas casas decimais
-    valor_em_reais = "{:.2f}".format(valor_em_reais)
-    # Divido este valor entre a parte inteira e a parte decimal
-    divididopelopontodecimal = valor_em_reais.split('.')
-    # Escrevo o número por extenso - no padrão pt-br
-    parte_inteira = num2words(divididopelopontodecimal[0], lang='pt-br')
-    parte_fracionaria = num2words(divididopelopontodecimal[1], lang='pt-br')
-    print(parte_inteira + ' reais e ' + parte_fracionaria + ' centavos')
-else:
+def tratarvalorinteiro(valor_em_reais):
     valor_em_reais = num2words(valor_em_reais, lang = 'pt-br')
     if(valor_em_reais == 'um'):
         print(valor_em_reais + ' real')
     else:
         print(valor_em_reais + ' reais')
+
+# Tratamento de entradas inválidas
+try:
+    # Leio um valor do tipo float do teclado
+    valor_em_reais = float(input('Digite um valor em reais: '));
+except ValueError:
+    print("Digite um valor válido")
+
+# Verifico se é decimal ou inteiro
+if(valor_em_reais % 1 != 0):
+    tratarvalordecimal(valor_em_reais) 
+else:
+    tratarvalorinteiro(valor_em_reais)
 
