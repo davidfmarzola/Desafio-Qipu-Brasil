@@ -12,3 +12,20 @@
 
 
 # Vale ressaltar que estas informações devem ser obtidas em tempo real do site, através de SCRAPPING.
+
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+
+    codigoICAO = input('Entre com o código ICAO: ')
+    browser = p.chromium.launch() # posso ver o chrome em tempo real
+    page = browser.new_page()
+    page.goto("https://aisweb.decea.mil.br/?i=aerodromos&codigo="+codigoICAO)
+
+    nascerdosol = page.locator('xpath=/html/body/div/div/div/div[2]/div[2]/div[1]/div[1]/h4/sunrise').text_content()
+    print("Nascer do sol: ", nascerdosol)
+    pordosol = page.locator('xpath=/html/body/div/div/div/div[2]/div[2]/div[1]/div[2]/h4/sunset').text_content()
+    print("Pôr do sol: ", pordosol)
+    
+    print(page.title())
+
