@@ -27,5 +27,20 @@ with sync_playwright() as p:
     pordosol = page.locator('xpath=/html/body/div/div/div/div[2]/div[2]/div[1]/div[2]/h4/sunset').text_content()
     print("Pôr do sol: ", pordosol)
     
-    print(page.title())
+    taf = page.locator('xpath=/html/body/div/div/div/div[2]/div[2]/p[2]').text_content()
+    print("TAF: ", taf)
+    metaf = page.locator('xpath=/html/body/div/div/div/div[2]/div[2]/p[3]').text_content()
+    print("METAF: ", metaf)
+
+    titulocartas_str = page.locator('xpath=/html/body/div/div/div/div[2]/div[2]/h4[2]').text_content()
+    print(titulocartas_str)
+
+    # extraindo o numero de cartas disponíveis da string
+    for i in range(len(titulocartas_str)):
+        if(titulocartas_str[i]>='0' and titulocartas_str[i]<='9'):
+            numero = int(titulocartas_str[i])
+
+    
+    
+    # print(page.title())
 
