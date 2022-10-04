@@ -16,31 +16,27 @@
 from playwright.sync_api import sync_playwright
 
 with sync_playwright() as p:
+    codigoICAO = input('Entre com o código ICAO: ') # código identificador de localidade do aeródromo
+    browser = p.chromium.launch() # instância do navegador
+    page = browser.new_page() # create a new page in a browse
+    page.goto("https://aisweb.decea.mil.br/?i=aerodromos&codigo="+codigoICAO) # procuro o identificador no link do site
 
-    codigoICAO = input('Entre com o código ICAO: ')
-    browser = p.chromium.launch() # posso ver o chrome em tempo real
-    page = browser.new_page()
-    page.goto("https://aisweb.decea.mil.br/?i=aerodromos&codigo="+codigoICAO)
-
-    nascerdosol = page.locator('xpath=/html/body/div/div/div/div[2]/div[2]/div[1]/div[1]/h4/sunrise').text_content()
+    # extraio o texto dos xpath (identifica as tags)
+    nascerdosol = page.locator('xpath=/html/body/div/div/div/div[2]/div[2]/div[1]/div[1]/h4/sunrise').text_content() 
     print("Nascer do sol: ", nascerdosol)
     pordosol = page.locator('xpath=/html/body/div/div/div/div[2]/div[2]/div[1]/div[2]/h4/sunset').text_content()
     print("Pôr do sol: ", pordosol)
     
-    taf = page.locator('xpath=/html/body/div/div/div/div[2]/div[2]/p[2]').text_content()
-    print("TAF: ", taf)
-    metaf = page.locator('xpath=/html/body/div/div/div/div[2]/div[2]/p[3]').text_content()
-    print("METAF: ", metaf)
+    metar = page.locator('xpath=/html/body/div/div/div/div[2]/div[2]/p[2]').text_content()
+    print("Metar: ", metar)
+    taf = page.locator('xpath=/html/body/div/div/div/div[2]/div[2]/p[3]').text_content()
+    print("Taf: ", taf)
 
-    titulocartas_str = page.locator('xpath=/html/body/div/div/div/div[2]/div[2]/h4[2]').text_content()
-    print(titulocartas_str)
-
-    # extraindo o numero de cartas disponíveis da string
-    for i in range(len(titulocartas_str)):
-        if(titulocartas_str[i]>='0' and titulocartas_str[i]<='9'):
-            numero = int(titulocartas_str[i])
-
-    
-    
-    # print(page.title())
+    # classe das Ul's desejadas: .list-icons-style-2
+    # ul > li > a
+    # Acho as tags desejadas por meio da classe e dos filhos respectivos
+    cartas = page.locator('.list-icons-style-2 > li > a')
+    # retorna uma lista de todas as cartas disponíveis
+    listadecartas = cartas.all_text_contents()
+    print("Cartas disponíveis: ", listadecartas)
 
